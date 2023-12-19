@@ -15,4 +15,6 @@ public class GetAllCarsResponse {
     private int state;
     private int brandId;
     private int colorId;
+    private String brandName;
+    private String colorName;
 }

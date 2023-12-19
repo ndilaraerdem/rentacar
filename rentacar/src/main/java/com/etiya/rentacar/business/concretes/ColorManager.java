@@ -14,6 +14,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @AllArgsConstructor
 @Service
@@ -51,4 +52,10 @@ public class ColorManager implements ColorService {
         return colors.stream().map(color-> this.modelMapperService.forResponse()
                 .map(color, GetAllColorResponse.class)).toList();
     }
+
+    @Override
+    public Optional<Color> getById(int id) {
+        return colorRepository.findById(id);
+    }
+
 }

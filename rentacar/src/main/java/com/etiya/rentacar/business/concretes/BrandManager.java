@@ -14,6 +14,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @AllArgsConstructor
 @Service
@@ -49,6 +50,11 @@ public class BrandManager implements BrandService {
         DeleteBrandResponse response = new DeleteBrandResponse();
         response.setId(id);
         return response;
+    }
+
+    @Override
+    public Optional<Brand> getById(int id) {
+        return brandRepository.findById(id);
     }
 
     @Override

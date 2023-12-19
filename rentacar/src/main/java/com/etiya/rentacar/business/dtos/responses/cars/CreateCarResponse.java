@@ -1,7 +1,5 @@
 package com.etiya.rentacar.business.dtos.responses.cars;
 
-import com.etiya.rentacar.entites.concretes.Brand;
-import com.etiya.rentacar.entites.concretes.Color;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,5 +15,7 @@ public class CreateCarResponse {
     private int state;
     private int brandId;
     private int colorId;
+    private String brandName;
+    private String colorName;
 
 }

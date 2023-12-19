@@ -28,7 +28,7 @@ public class CarsController {
     public ResponseEntity<List<GetAllCarsResponse>> getAll(){
         return ResponseEntity.ok(carService.getAll());
     }
-    
+
     @PutMapping
     public UpdateCarResponse add(@RequestBody @Valid UpdateCarRequest updateCarRequest){
         return carService.update(updateCarRequest);

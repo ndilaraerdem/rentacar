@@ -1,18 +1,16 @@
 package com.etiya.rentacar.business.concretes;
 
+import com.etiya.rentacar.business.abstracts.BrandService;
 import com.etiya.rentacar.business.abstracts.CarService;
+import com.etiya.rentacar.business.abstracts.ColorService;
 import com.etiya.rentacar.business.dtos.requests.cars.CreateCarRequest;
 import com.etiya.rentacar.business.dtos.requests.cars.UpdateCarRequest;
-import com.etiya.rentacar.business.dtos.responses.brands.DeleteBrandResponse;
-import com.etiya.rentacar.business.dtos.responses.brands.GetAllBrandResponse;
-import com.etiya.rentacar.business.dtos.responses.brands.UpdateBrandResponse;
 import com.etiya.rentacar.business.dtos.responses.cars.CreateCarResponse;
 import com.etiya.rentacar.business.dtos.responses.cars.DeleteCarResponse;
 import com.etiya.rentacar.business.dtos.responses.cars.GetAllCarsResponse;
 import com.etiya.rentacar.business.dtos.responses.cars.UpdateCarResponse;
 import com.etiya.rentacar.core.utilities.mapping.ModelMapperService;
 import com.etiya.rentacar.dataaccess.abstracts.CarRepository;
-import com.etiya.rentacar.entites.concretes.Brand;
 import com.etiya.rentacar.entites.concretes.Car;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,11 +22,23 @@ import java.util.List;
 public class CarManager implements CarService {
     CarRepository carRepository;
     ModelMapperService modelMapperService;
+    ColorService colorService;
+    BrandService brandService;
     @Override
     public CreateCarResponse add(CreateCarRequest createCarRequest) {
+        int carCountByBrandId = carRepository.countByBrandId(createCarRequest.getBrandId());
+        if (carCountByBrandId >= 10){
+            throw new RuntimeException("Aynı marka arabadan en fazla 10 adet ekleyebilirsiniz.");
+        }
         Car car = modelMapperService.forRequest().map(createCarRequest, Car.class);
         Car createdCar = carRepository.save(car);
-        return modelMapperService.forResponse().map(createdCar, CreateCarResponse.class);
+        CreateCarResponse response = modelMapperService.forResponse().map(createdCar, CreateCarResponse.class);
+//        Color carColor = colorService.getById(createCarRequest.getColorId()).orElseThrow(RuntimeException::new);
+//        Brand carBrand = brandService.getById(createCarRequest.getBrandId()).orElseThrow(RuntimeException::new);
+
+//        response.setColorName(carColor.getName());
+//        response.setBrandName(carBrand.getName());
+        return response;
     }
 
     @Override
