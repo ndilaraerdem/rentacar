@@ -11,8 +11,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Table(name = "cars")
 public class Car {
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY);
     @Column(name = "id")
     private int id;
     @Column(name = "dailyPrice")
@@ -27,5 +27,9 @@ public class Car {
     @ManyToOne
     @JoinColumn(name = "brand_id")
     private Brand brand;
+
+    @ManyToOne
+    @JoinColumn(name = "color_id")
+    private Color color;
 }
 
