@@ -9,6 +9,7 @@ import com.etiya.rentacar.business.dtos.responses.cars.CreateCarResponse;
 import com.etiya.rentacar.business.dtos.responses.cars.DeleteCarResponse;
 import com.etiya.rentacar.business.dtos.responses.cars.GetAllCarsResponse;
 import com.etiya.rentacar.business.dtos.responses.cars.UpdateCarResponse;
+import com.etiya.rentacar.business.rules.cars.CarBusinessRules;
 import com.etiya.rentacar.core.utilities.mapping.ModelMapperService;
 import com.etiya.rentacar.dataaccess.abstracts.CarRepository;
 import com.etiya.rentacar.entites.concretes.Car;
@@ -22,23 +23,14 @@ import java.util.List;
 public class CarManager implements CarService {
     CarRepository carRepository;
     ModelMapperService modelMapperService;
-    ColorService colorService;
-    BrandService brandService;
+    CarBusinessRules carBusinessRules;
+
     @Override
     public CreateCarResponse add(CreateCarRequest createCarRequest) {
-        int carCountByBrandId = carRepository.countByBrandId(createCarRequest.getBrandId());
-        if (carCountByBrandId >= 10){
-            throw new RuntimeException("Aynı marka arabadan en fazla 10 adet ekleyebilirsiniz.");
-        }
+        carBusinessRules.eachBrandCanContainMaxTenCars(createCarRequest.getBrandId());
         Car car = modelMapperService.forRequest().map(createCarRequest, Car.class);
         Car createdCar = carRepository.save(car);
-        CreateCarResponse response = modelMapperService.forResponse().map(createdCar, CreateCarResponse.class);
-//        Color carColor = colorService.getById(createCarRequest.getColorId()).orElseThrow(RuntimeException::new);
-//        Brand carBrand = brandService.getById(createCarRequest.getBrandId()).orElseThrow(RuntimeException::new);
-
-//        response.setColorName(carColor.getName());
-//        response.setBrandName(carBrand.getName());
-        return response;
+        return modelMapperService.forResponse().map(createdCar, CreateCarResponse.class);
     }
 
     @Override
