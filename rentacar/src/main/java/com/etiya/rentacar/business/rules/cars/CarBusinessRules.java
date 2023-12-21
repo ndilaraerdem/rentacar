@@ -19,12 +19,12 @@ public class CarBusinessRules {
         }
     }
     public void carCanBeSentToMaintenanceIfItIsAvailable(int carId) {
-        Car car = carRepository.findById(carId).orElseThrow(()-> new BusinessException("There is no car with given id: "+ carId));
+        Car car = carRepository.findById(carId).orElseThrow(()-> new BusinessException(CarBusinessMessages.CarShouldBeExists + carId));
         if (car.getState() == 2){
-            throw new BusinessException("This car is already at maintenance");
+            throw new BusinessException(CarBusinessMessages.CarCanNotBeSentMaintenanceWithStateMaintenance);
         }
         if (car.getState() == 3){
-            throw new BusinessException("this car can not be sent to maintenance. Status: rented");
+            throw new BusinessException(CarBusinessMessages.CarCanNotBeSentMaintenanceWithStateRented);
         }
     }
 
