@@ -1,6 +1,9 @@
 package com.etiya.rentacar.business.rules.cars;
 
+import com.etiya.rentacar.business.messages.CarBusinessMessages;
+import com.etiya.rentacar.core.utilities.exceptions.types.BusinessException;
 import com.etiya.rentacar.dataaccess.abstracts.CarRepository;
+import com.etiya.rentacar.entites.concretes.Car;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +15,17 @@ public class CarBusinessRules {
     public void eachBrandCanContainMaxTenCars(int brandId) {
         int carCountInGivenBrand = carRepository.countByBrandId(brandId);
         if (carCountInGivenBrand >= 10){
-            throw new RuntimeException("Each brand can contains max 10 cars");
+            throw new BusinessException(CarBusinessMessages.EachBrandCanContainMaxTenCars);
         }
     }
+    public void carCanBeSentToMaintenanceIfItIsAvailable(int carId) {
+        Car car = carRepository.findById(carId).orElseThrow(()-> new BusinessException("There is no car with given id: "+ carId));
+        if (car.getState() == 2){
+            throw new BusinessException("This car is already at maintenance");
+        }
+        if (car.getState() == 3){
+            throw new BusinessException("this car can not be sent to maintenance. Status: rented");
+        }
+    }
+
 }

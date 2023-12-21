@@ -31,5 +31,13 @@ public class Car {
     @ManyToOne
     @JoinColumn(name = "color_id")
     private Color color;
+
+    @ManyToOne
+    @JoinColumn(name = "fuel_id")
+    private Fuel fuel;
+
+    @ManyToOne
+    @JoinColumn(name = "transformation_id")
+    private Transformation transformation;
 }
 

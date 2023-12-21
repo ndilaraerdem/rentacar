@@ -2,11 +2,9 @@ package com.etiya.rentacar.controllers;
 
 import com.etiya.rentacar.business.abstracts.CarService;
 import com.etiya.rentacar.business.dtos.requests.cars.CreateCarRequest;
+import com.etiya.rentacar.business.dtos.requests.cars.CreateMaintenanceRequest;
 import com.etiya.rentacar.business.dtos.requests.cars.UpdateCarRequest;
-import com.etiya.rentacar.business.dtos.responses.cars.CreateCarResponse;
-import com.etiya.rentacar.business.dtos.responses.cars.DeleteCarResponse;
-import com.etiya.rentacar.business.dtos.responses.cars.GetAllCarsResponse;
-import com.etiya.rentacar.business.dtos.responses.cars.UpdateCarResponse;
+import com.etiya.rentacar.business.dtos.responses.cars.*;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -37,4 +35,19 @@ public class CarsController {
     public DeleteCarResponse delete(@RequestBody int id){
         return carService.delete(id);
     }
+
+    @PostMapping("/sendCarToMaintenance")
+    public CreateMaintenanceResponse add(@RequestBody @Valid CreateMaintenanceRequest createMaintenanceRequest){
+        return carService.sendCarToMaintenance(createMaintenanceRequest);
+    }
 }
+
+//WS1
+//Fuel->id,name Electric,Diesel,Benzin
+//Transformation->id,name->manual,automatic
+//add validation rules for names
+
+//WS2
+//Cars can be sent to maintenance
+//only available cars can be sent to maintenance-->error detail->This car is already at maintenance
+//--> this car can not be sent to maintenance. Status: rented
